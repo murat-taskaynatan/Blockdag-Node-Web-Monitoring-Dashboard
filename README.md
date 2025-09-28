@@ -77,7 +77,7 @@ sudo systemctl enable --now blockdag-dashboard
 
 Now open: http://<VM_IP>:8080
 
-Usage
+## Usage
 
 Default container: blockdag-testnet-network
 
