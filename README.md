@@ -22,6 +22,10 @@ It auto-detects whether `docker` or `sudo docker` is needed, fetches health endp
 ## 📦 Installation
 
 ### 1. Clone the repo
+```bash
+git clone https://github.com/<your-username>/blockdag-dashboard.git
+cd blockdag-dashboard
+### 1. Clone the repo
 
 git clone https://github.com/<your-username>/blockdag-dashboard.git
 cd blockdag-dashboard
