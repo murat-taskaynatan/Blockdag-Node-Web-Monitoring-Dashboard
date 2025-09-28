@@ -42,7 +42,7 @@ sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv
 
 # Clone the repo
-git clone https://github.com/<your-username>/blockdag-dashboard.git
+git clone https://github.com/murat-taskaynatan/blockdag-dashboard.git
 cd blockdag-dashboard
 
 # Virtual Environment (Recommended)
