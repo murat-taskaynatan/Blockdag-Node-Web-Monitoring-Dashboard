@@ -96,8 +96,6 @@ docker exec -it my-node apt-get update && docker exec -it my-node apt-get instal
 
 sudo usermod -aG docker $USER && newgrp docker
 
-## Installation
-
 🚀 Contributing
 
 Pull requests are welcome!
