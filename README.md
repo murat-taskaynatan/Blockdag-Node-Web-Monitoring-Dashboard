@@ -67,12 +67,12 @@ docker exec -it my-node apt-get update && docker exec -it my-node apt-get instal
 # If Docker requires sudo with a password:
 sudo usermod -aG docker $USER && newgrp docker
 
-## 🚀 Contributing
+🚀 Contributing
 
 Pull requests are welcome!
 For major changes, open an issue first to discuss what you’d like to change.
 
-## 📊 Roadmap
+📊 Roadmap
 
  Recent log preview in UI
  Mini chart of peers/height over time
