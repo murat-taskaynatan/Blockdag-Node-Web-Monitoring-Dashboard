@@ -82,7 +82,7 @@ Now open: http://<VM_IP>:8080
 
 Default container: blockdag-testnet-network
 
-#Override via query string:
+# Override via query string:
 
 http://<host>:8080/?container=my-node&since=5m&tail=800
 
