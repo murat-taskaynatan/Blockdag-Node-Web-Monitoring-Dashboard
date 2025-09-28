@@ -9,66 +9,94 @@ It auto-detects whether `docker` or `sudo docker` is needed, fetches health endp
 
 ---
 
-## ✨ Features
-- **Docker auto-detect**: Works with `docker` or `sudo docker -n`.
-- **Health endpoints**: Queries `/readyz` and `/healthz` inside the container (via `docker exec curl`).
-- **Log parsing**: Extracts peers, height, hashrate, last log timestamp.
-- **Status detection**: Shows mining/healthy/syncing/error states.
-- **Web UI**: Modern, responsive design with live auto-refresh every 10s.
-- **Configurable**: Change container name, `--since`, and `--tail` via the UI or query string.
+## 🚀 Features
+- **Docker auto-detect** → Works with `docker` or `sudo docker -n`
+- **Node health checks** → Calls `/readyz` and `/healthz` inside the container
+- **Live metrics** → Displays peers, height, hashrate, and last log timestamp
+- **Status detection** → Shows `✅ Healthy`, `⏳ Syncing`, `🔗 Connected`, or `❌ Error` based on logs + endpoints
+- **Responsive UI** → Card-based layout with colored status pills and auto-refresh every 10s
+- **Configurable** → Change container, `--since`, and `--tail` via the UI or query string
 
 ---
 
-## 🚀 Quick start
+## 📦 Installation
 
-### 1. Install dependencies
+### 1. Clone the repo
 ```bash
+git clone https://github.com/<your-username>/blockdag-dashboard.git
+cd blockdag-dashboard
+2. Install dependencies (venv recommended)
+bash
+Copy code
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv
-cd ~/blockdag-scripts
+
 python3 -m venv .venv
 ./.venv/bin/pip install --upgrade pip
 ./.venv/bin/pip install -r requirements.txt
-
-# Run locally
+▶️ Running
+Local run
+bash
+Copy code
 ./.venv/bin/python app.py
+Open: http://localhost:8080
 
-Open http://localhost:8080
-
-# Run as a service (systemd)
-
+Systemd service
 Create /etc/systemd/system/blockdag-dashboard.service:
 
+ini
+Copy code
 [Unit]
 Description=BlockDAG Web Dashboard
 After=network-online.target docker.service
 Wants=network-online.target
 
 [Service]
-WorkingDirectory=/home/ubuntu/blockdag-scripts
-ExecStart=/home/ubuntu/blockdag-scripts/.venv/bin/python /home/ubuntu/blockdag-scripts/app.py
+WorkingDirectory=/home/ubuntu/blockdag-dashboard
+ExecStart=/home/ubuntu/blockdag-dashboard/.venv/bin/python /home/ubuntu/blockdag-dashboard/app.py
 Restart=always
 RestartSec=3
 Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
+Enable + start:
 
-# Enable:
+bash
+Copy code
 sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
-
 Now visit http://<VM_IP>:8080.
 
 ⚙️ Usage
-
 Default container: blockdag-testnet-network
 
-# Change container in the UI or via query params:
+Override via query string:
 
+perl
+Copy code
 http://<host>:8080/?container=my-node&since=5m&tail=800
-Auto-refresh: 10s
+Health endpoints may show “—” if the container doesn’t have curl. Install with:
 
-# If health endpoints show “—”, install curl inside the container:
+bash
+Copy code
+docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
+If Docker requires sudo with a password:
+
+bash
+Copy code
+sudo usermod -aG docker $USER && newgrp docker
+📊 Roadmap
+ Recent log preview in UI
+
+ Mini chart of peers/height over time
+
+ Dark/light theme toggle
+
+ Container selection dropdown
+
+🤝 Contributing
+Pull requests are welcome! Please open an issue first for major changes.
+
 
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
