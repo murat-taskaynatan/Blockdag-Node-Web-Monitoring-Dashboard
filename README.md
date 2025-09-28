@@ -48,7 +48,7 @@ python3 -m venv .venv
 ./.venv/bin/pip install --upgrade pip
 ./.venv/bin/pip install -r requirements.txt
 
-#Local run
+# Local run
 ./.venv/bin/python app.py
 
 # Enable and Start:
