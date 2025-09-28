@@ -38,7 +38,7 @@ sudo apt-get install -y python3 python3-pip python3-venv
 python3 -m venv .venv
 ./.venv/bin/pip install --upgrade pip
 ./.venv/bin/pip install -r requirements.txt
-▶️ Running
+## ▶️ Running
 Local run
 bash
 Copy code
@@ -71,7 +71,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
 Now visit http://<VM_IP>:8080.
 
-⚙️ Usage
+## ⚙️ Usage
 Default container: blockdag-testnet-network
 
 Override via query string:
@@ -86,7 +86,7 @@ If Docker requires sudo with a password:
 
 
 sudo usermod -aG docker $USER && newgrp docker
-📊 Roadmap
+## 📊 Roadmap
  Recent log preview in UI
 
  Mini chart of peers/height over time
