@@ -75,7 +75,7 @@ For major changes, open an issue first to discuss what you’d like to change.
 📊 Roadmap
 
  Recent log preview inside UI
- Mini chart of peers/height over time
+ Mini chart of historical peers/height 
  Dark/light theme toggle
  Container selection dropdown
 
