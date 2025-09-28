@@ -30,12 +30,12 @@ python3 -m venv .venv
 ./.venv/bin/pip install --upgrade pip
 ./.venv/bin/pip install -r requirements.txt
 
-2. Run locally
+# Run locally
 ./.venv/bin/python app.py
 
 Open http://localhost:8080
 
-3. Run as a service (systemd)
+# Run as a service (systemd)
 
 Create /etc/systemd/system/blockdag-dashboard.service:
 
@@ -54,7 +54,7 @@ Environment=PYTHONUNBUFFERED=1
 [Install]
 WantedBy=multi-user.target
 
-Enable:
+# Enable:
 sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
 
@@ -64,8 +64,8 @@ Now visit http://<VM_IP>:8080.
 
 Default container: blockdag-testnet-network
 
-Change container in the UI or via query params:
+# Change container in the UI or via query params:
 http://<host>:8080/?container=my-node&since=5m&tail=800
 Auto-refresh: 10s
-If health endpoints show “—”, install curl inside the container:
+# If health endpoints show “—”, install curl inside the container:
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
