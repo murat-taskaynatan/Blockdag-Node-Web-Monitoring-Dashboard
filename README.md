@@ -53,24 +53,6 @@ python3 -m venv .venv
 #Local run
 ./.venv/bin/python app.py
 
-Systemd Service
-
-# Create /etc/systemd/system/blockdag-dashboard.service:
-[Unit]
-Description=BlockDAG Web Dashboard
-After=network-online.target docker.service
-Wants=network-online.target
-
-[Service]
-WorkingDirectory=/home/ubuntu/blockdag-dashboard
-ExecStart=/home/ubuntu/blockdag-dashboard/.venv/bin/python /home/ubuntu/blockdag-dashboard/app.py
-Restart=always
-RestartSec=3
-Environment=PYTHONUNBUFFERED=1
-
-[Install]
-WantedBy=multi-user.target
-
 # Enable and Start:
 
 sudo systemctl daemon-reload
@@ -78,19 +60,13 @@ sudo systemctl enable --now blockdag-dashboard
 
 Now open: http://<VM_IP>:8080
 
-# Usage:
-
-Default container: blockdag-testnet-network
-
 # Override via query string:
 
 http://<host>:8080/?container=my-node&since=5m&tail=800
 
-
 # Health endpoints may show “—” if the container doesn’t have curl. Install with:
 
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
-
 
 # If Docker requires sudo with a password:
 
