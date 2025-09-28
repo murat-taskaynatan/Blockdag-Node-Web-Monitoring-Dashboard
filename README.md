@@ -3,7 +3,8 @@
 A lightweight, self-hosted **Flask web dashboard** for monitoring BlockDAG nodes running inside Docker.  
 It auto-detects whether to use `docker` or `sudo docker`, queries container health endpoints, parses logs, and displays node metrics in a modern web UI.
 
-<img width="996" height="624" alt="image" src="https://github.com/user-attachments/assets/84e8ac80-9a39-47bc-93f6-294dd9b9e675" />
+<img width="1079" height="501" alt="image" src="https://github.com/user-attachments/assets/db53caa7-85d5-46fe-ae27-cf096c4c763a" />
+
 
 
 ---
