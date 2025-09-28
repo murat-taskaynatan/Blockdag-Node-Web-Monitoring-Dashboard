@@ -77,7 +77,7 @@ sudo systemctl enable --now blockdag-dashboard
 
 Now open: http://<VM_IP>:8080
 
-## Usage
+# Usage
 
 Default container: blockdag-testnet-network
 
@@ -95,7 +95,7 @@ docker exec -it my-node apt-get update && docker exec -it my-node apt-get instal
 
 sudo usermod -aG docker $USER && newgrp docker
 
-Contributing
+🚀 Contributing
 
 Pull requests are welcome!
 For major changes, open an issue first to discuss what you’d like to change.
