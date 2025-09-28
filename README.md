@@ -19,8 +19,9 @@ It auto-detects whether to use `docker` or `sudo docker`, queries container heal
   - [Virtual Environment (Recommended)](#virtual-environment-recommended)
 - [Running](#running)
   - [Local Run](#local-run)
+-  [Contributing](#contributing)
 - [Roadmap](#roadmap)
-- [Contributing](#contributing)
+
 - [License](#license)
 
 ---
