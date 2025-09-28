@@ -54,22 +54,17 @@ python3 -m venv .venv
 ./.venv/bin/python app.py
 
 # Enable and Start:
-
 sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
-
 Now open: http://<VM_IP>:8080
 
 # Override via query string:
-
 http://<host>:8080/?container=my-node&since=5m&tail=800
 
 # Health endpoints may show “—” if the container doesn’t have curl. Install with:
-
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
 
 # If Docker requires sudo with a password:
-
 sudo usermod -aG docker $USER && newgrp docker
 
 🚀 Contributing
