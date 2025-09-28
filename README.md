@@ -22,7 +22,7 @@ It auto-detects whether `docker` or `sudo docker` is needed, fetches health endp
 ## 📦 Installation
 
 ### 1. Clone the repo
-```bash
+
 git clone https://github.com/<your-username>/blockdag-dashboard.git
 cd blockdag-dashboard
 2. Install dependencies (venv recommended)
@@ -44,8 +44,8 @@ Open: http://localhost:8080
 Systemd service
 Create /etc/systemd/system/blockdag-dashboard.service:
 
-ini
-Copy code
+
+
 [Unit]
 Description=BlockDAG Web Dashboard
 After=network-online.target docker.service
@@ -62,8 +62,7 @@ Environment=PYTHONUNBUFFERED=1
 WantedBy=multi-user.target
 Enable + start:
 
-bash
-Copy code
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
 Now visit http://<VM_IP>:8080.
@@ -73,18 +72,15 @@ Default container: blockdag-testnet-network
 
 Override via query string:
 
-perl
-Copy code
+
 http://<host>:8080/?container=my-node&since=5m&tail=800
 Health endpoints may show “—” if the container doesn’t have curl. Install with:
 
-bash
-Copy code
+
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
 If Docker requires sudo with a password:
 
-bash
-Copy code
+
 sudo usermod -aG docker $USER && newgrp docker
 📊 Roadmap
  Recent log preview in UI
