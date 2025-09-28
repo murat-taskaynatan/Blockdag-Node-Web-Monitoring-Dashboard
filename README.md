@@ -71,14 +71,14 @@ Environment=PYTHONUNBUFFERED=1
 [Install]
 WantedBy=multi-user.target
 
-# Enable and Start
+# Enable and Start:
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now blockdag-dashboard
 
 Now open: http://<VM_IP>:8080
 
-# Usage
+# Usage:
 
 Default container: blockdag-testnet-network
 
