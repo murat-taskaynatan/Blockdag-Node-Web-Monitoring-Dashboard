@@ -36,10 +36,10 @@ It auto-detects whether to use `docker` or `sudo docker`, queries container heal
 ---
 
 ## Installation
-
-#Dependencies
-#Install Python and pip:
 ```bash
+Dependencies
+#Install Python and pip:
+
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv
 
@@ -68,6 +68,8 @@ docker exec -it my-node apt-get update && docker exec -it my-node apt-get instal
 
 # If Docker requires sudo with a password:
 sudo usermod -aG docker $USER && newgrp docker
+
+```
 
 🚀 Contributing
 
