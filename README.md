@@ -65,7 +65,10 @@ Now visit http://<VM_IP>:8080.
 Default container: blockdag-testnet-network
 
 # Change container in the UI or via query params:
+
 http://<host>:8080/?container=my-node&since=5m&tail=800
 Auto-refresh: 10s
+
 # If health endpoints show “—”, install curl inside the container:
+
 docker exec -it my-node apt-get update && docker exec -it my-node apt-get install -y curl
