@@ -37,8 +37,8 @@ It auto-detects whether to use `docker` or `sudo docker`, queries container heal
 
 ## Installation
 ```bash
-Dependencies
-#Install Python and pip:
+
+#Install Python and pip (Dependencies) :
 
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv
