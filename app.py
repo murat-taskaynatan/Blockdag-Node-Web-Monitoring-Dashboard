@@ -13,14 +13,15 @@ _RESP_CACHE_TTL = 2.0  # seconds
 # ---------- persistence ----------
 STATE_PATH = os.path.join(os.path.dirname(__file__), ".state.json")
 def _state_default():
-    return {"last_seen_ts": None, "counters": {"mined": 0, "processed": 0, "sealed": 0}}
+    return {"last_seen_ts": None, "last_height": None, "counters": {"mined": 0, "processed": 0, "sealed": 0}}
 def load_state():
     try:
         with open(STATE_PATH, "r") as f:
             d = json.load(f)
             base = _state_default()
             base.update({k: d.get(k, base[k]) for k in base})
-            base["counters"].update(d.get("counters", {}))
+            base["counters"].update(d.get("counters", {}));
+            base["last_height"] = d.get("last_height", base.get("last_height"))
             return base
     except Exception:
         return _state_default()
@@ -218,6 +219,15 @@ def api_status():
             peers = "N/A" if pv is None else str(pv)
 
     height_val = extract_max_int(HEIGHT_PATS, live_logs)
+    height_stale = False
+    # update cache if we have a fresh height
+    if height_val is not None:
+        state["last_height"] = int(height_val)
+        save_state(state)
+    # fallback to cached height when missing in current window
+    if height_val is None and state.get("last_height") is not None:
+        height_val = int(state["last_height"])
+        height_stale = True
 
     resp = {
         "ok": True,
@@ -227,6 +237,7 @@ def api_status():
         "last_log_time_local": pretty_local_ts(last_ts or ""),
         "peers": peers,
         "height": (str(height_val) if height_val is not None else "N/A"),
+        "height_stale": height_stale,
         "mined_total": state["counters"]["mined"],
         "processed_total": state["counters"]["processed"],
         "sealed_total": state["counters"]["sealed"],
@@ -346,7 +357,7 @@ async function fetchStatus(){
   setSync(data.sync_status || 'N/A');
   el('last_ts').textContent = (data.last_log_time_local || data.last_log_time_raw || 'N/A');
   el('peers').textContent   = data.peers;
-  el('height').textContent  = data.height;
+  el('height').textContent  = data.height + (data.height_stale ? ' (cached)' : '');
   el('mined_total').textContent     = data.mined_total ?? 0;
   el('processed_total').textContent = data.processed_total ?? 0;
   el('sealed_total').textContent    = data.sealed_total ?? 0;
