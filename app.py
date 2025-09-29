@@ -375,4 +375,47 @@ function renderPeers(list, numericPeers){
 
 async function fetchStatus(){
   const container=document.getElementById('container').value.trim();
-  const since=document.getElementById(
+  const since=document.getElementById('since').value.trim();
+  const tail=document.getElementById('tail').value.trim()||"600";
+  const qs=new URLSearchParams({container,tail}); if(since) qs.set("since", since);
+  let res;
+  try{
+     res = await fetch("/api/status?"+qs.toString());
+  }catch(e){
+     // keep last values, just show error pill
+     setHealth('error', '❌ Request failed'); setSync('❌ Error');
+     return;
+  }
+  const el=(id)=>document.getElementById(id);
+  if(!res.ok){
+     let data={}; try{data=await res.json();}catch(e){}
+     const msg = "❌ " + (data.error || `Request failed (${res.status})`);
+     setHealth('error', msg); setSync('❌ Error');
+     return;
+  }
+  const data=await res.json();
+  setHealth(data.health_state, data.health_msg);
+  setSync(data.sync_status||'');
+  el('last_ts').textContent  = (data.last_log_time_local || data.last_log_time_raw || 'N/A');
+  el('peers').textContent    = data.peers;
+  el('height').textContent   = data.height + (data.height_stale ? ' (cached)' : '');
+  el('mined_total').textContent     = data.mined_total ?? 0;
+  el('processed_total').textContent = data.processed_total ?? 0;
+  el('sealed_total').textContent    = data.sealed_total ?? 0;
+  renderPeers(data.peers_list || [], data.peers);
+}
+
+function start(){ fetchStatus(); if(timer) clearInterval(timer); timer=setInterval(fetchStatus, 10000); }
+document.getElementById('refreshBtn').addEventListener('click', start);
+document.getElementById('resetBtn').addEventListener('click', async ()=>{ await fetch("/api/reset_totals",{method:"POST"}); start(); });
+window.addEventListener('load', start);
+</script>
+</body>
+</html>
+"""
+@app.get("/")
+def index():
+    return Response(INDEX_HTML, mimetype="text/html")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
