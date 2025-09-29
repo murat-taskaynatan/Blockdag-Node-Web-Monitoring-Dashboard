@@ -78,7 +78,25 @@ def count_occurrences(pats, text):
     return sum(len(re.findall(p, text, flags=re.I)) for p in pats)
 
 def derive_health_from_logs(logs):
-    if re.search(r'\b(error|fatal|panic)\b', logs, re.I): return ("error","❌ Errors detected — check logs")
+    """
+    Decide health state based on recent logs.
+    Only report "error" if more than 5 error-like lines are found.
+    """
+    if not logs:
+        return ("unclear","❔ No logs")
+
+    # Count errors
+    err_hits = re.findall(r'(error|fatal|panic)', logs, re.I)
+    if len(err_hits) > 5:
+        return ("error","❌ Errors detected ({}+)".format(len(err_hits)))
+
+    if re.search(r'downloading blocks|sync(ing)?|catching up', logs, re.I):
+        return ("syncing","⏳ Syncing (downloading blocks)")
+    if re.search(r'(mined|mining|accepted|sealed)', logs, re.I):
+        return ("mining","✅ Mining/processing activity")
+    if re.search(r'connected|peers?', logs, re.I):
+        return ("connected","🔗 Connected to peers")
+    return ("unclear","❔ Status unclear — check logs")
     if re.search(r'downloading blocks|sync(ing)?|catching up', logs, re.I): return ("syncing","⏳ Syncing (downloading blocks)")
     if re.search(r'\b(mined|mining|accepted|sealed)\b', logs, re.I): return ("mining","✅ Mining/processing activity")
     if re.search(r'\bconnected\b|\bpeers?\b', logs, re.I): return ("connected","🔗 Connected to peers")
@@ -337,10 +355,12 @@ let timer=null;
 function setHealth(state,msg){
   const el=document.getElementById('healthLine'); if(!el) return;
   let cls='pill muted';
-  if(state==='mining') cls='pill ok';
-  else if(state==='syncing'||state==='connected') cls='pill warn';
-  else if(state==='error') cls='pill err';
-  el.className=cls; el.textContent=msg||'—';
+  let text=msg||'—';
+  if(state==='mining'){ cls='pill ok'; text='✅ Mining'; }
+  else if(state==='syncing'){ cls='pill warn'; text='⏳ Syncing'; }
+  else if(state==='connected'){ cls='pill warn'; text=msg||'🔗 Connected'; }
+  else if(state==='error'){ cls='pill err'; }
+  el.className=cls; el.textContent=text;
 }
 
 // Show sync pill ONLY when ✅ Synced
