@@ -78,29 +78,20 @@ def count_occurrences(pats, text):
     return sum(len(re.findall(p, text, flags=re.I)) for p in pats)
 
 def derive_health_from_logs(logs):
-    """
-    Decide health state based on recent logs.
-    Only report "error" if more than 5 error-like lines are found.
-    """
     if not logs:
-        return ("unclear","❔ No logs")
+        return ("unclear", "❔ No logs")
 
-    # Count errors
-    err_hits = re.findall(r'(error|fatal|panic)', logs, re.I)
+    err_hits = re.findall(r"\b(error|fatal|panic)\b", logs, re.I)
     if len(err_hits) > 5:
-        return ("error","❌ Errors detected ({}+)".format(len(err_hits)))
+        return ("error", f"❌ Errors detected ({len(err_hits)}+)")
 
-    if re.search(r'downloading blocks|sync(ing)?|catching up', logs, re.I):
-        return ("syncing","⏳ Syncing (downloading blocks)")
-    if re.search(r'(mined|mining|accepted|sealed)', logs, re.I):
-        return ("mining","✅ Mining/processing activity")
-    if re.search(r'connected|peers?', logs, re.I):
-        return ("connected","🔗 Connected to peers")
-    return ("unclear","❔ Status unclear — check logs")
-    if re.search(r'downloading blocks|sync(ing)?|catching up', logs, re.I): return ("syncing","⏳ Syncing (downloading blocks)")
-    if re.search(r'\b(mined|mining|accepted|sealed)\b', logs, re.I): return ("mining","✅ Mining/processing activity")
-    if re.search(r'\bconnected\b|\bpeers?\b', logs, re.I): return ("connected","🔗 Connected to peers")
-    return ("unclear","❔ Status unclear — check logs")
+    if re.search(r"\b(downloading blocks|sync(?:ing)?|catching up)\b", logs, re.I):
+        return ("syncing", "⏳ Syncing (downloading blocks)")
+    if re.search(r"\b(mined|mining|accepted|sealed)\b", logs, re.I):
+        return ("mining", "✅ Mining/processing activity")
+    if re.search(r"\bconnected\b|\bpeers?\b", logs, re.I):
+        return ("connected", "🔗 Connected to peers")
+    return ("unclear", "❔ Status unclear — check logs")
 
 def derive_sync_status(logs):
     if re.search(r'error', logs, re.I): return "❌ Error"
@@ -320,7 +311,6 @@ INDEX_HTML = """<!doctype html>
       </div>
 
       <div id="healthLine" class="pill muted">Loading…</div>
-      <div id="syncLine" class="pill muted" style="margin-top:8px; display:none">Sync: Synced</div>
 
       <div class="grid" style="margin-top:12px">
         <div><span class="k">Last log time</span><div id="last_ts">—</div></div>
@@ -364,17 +354,6 @@ function setHealth(state,msg){
 }
 
 // Show sync pill ONLY when ✅ Synced
-function setSync(text){
-  const el=document.getElementById('syncLine'); if(!el) return;
-  const t=(text||'').toString();
-  if(t.startsWith('✅')){
-    el.className='pill ok';
-    el.textContent='Sync: Synced';
-    el.style.display='inline-block';
-  } else {
-    el.style.display='none';
-  }
-}
 
 function renderPeers(list, numericPeers){
   const tb=document.getElementById('peersBody'); if(!tb) return;
@@ -403,19 +382,16 @@ async function fetchStatus(){
      res = await fetch("/api/status?"+qs.toString());
   }catch(e){
      // keep last values, just show error pill
-     setHealth('error', '❌ Request failed'); setSync('❌ Error');
      return;
   }
   const el=(id)=>document.getElementById(id);
   if(!res.ok){
      let data={}; try{data=await res.json();}catch(e){}
      const msg = "❌ " + (data.error || `Request failed (${res.status})`);
-     setHealth('error', msg); setSync('❌ Error');
      return;
   }
   const data=await res.json();
   setHealth(data.health_state, data.health_msg);
-  setSync(data.sync_status||'');
   el('last_ts').textContent  = (data.last_log_time_local || data.last_log_time_raw || 'N/A');
   el('peers').textContent    = data.peers;
   el('height').textContent   = data.height + (data.height_stale ? ' (cached)' : '');
